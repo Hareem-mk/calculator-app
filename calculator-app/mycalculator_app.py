@@ -6,18 +6,30 @@ st.set_page_config(page_title="My Calculator", page_icon="🔢")
 st.title("🔢 My Advance Calculator")
 st.markdown("---")
 
+calculator_type = st.radio(
+    "Select Calculator Type",
+    ["Standard Calculator", "Scientific Calculator"]
+)
+st.markdown("---")
+
 # Initialize history
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# layout - two columns
-col1, col2 = st.columns(2)
+# Radio buttons
 
-with col1:
-    num1 = st.number_input("Enter first number", value=0.0)
+# Standard Calculator
+if calculator_type == "Standard Calculator":
+    # all standard calculator code here
+    # including history section 
+    # including clear history button
+    col1, col2 = st.columns (2)
 
-with col2:
-    num2 = st.number_input("Enter second number", value=0.0)
+    with col1:    
+        num1 = st.number_input("Enter first number", value=0.0)
+
+    with col2:
+        num2 = st.number_input("Enter second number", value=0.0)
 
 # Operator selection
 operator = st.selectbox("Select operator", [
@@ -86,7 +98,60 @@ else:
 
 if st.button("Clear History"):
     st.session_state.history = []
-    st.rerun()            
+    st.rerun() 
+# Scientific Calculator                
+if calculator_type == "Scientific Calculator":
+    # all scientific calculator code here
+    st.subheader("Scientific Calculator")
+    sci_num = st.number_input("Enter number", value=0.0)
+    sci_operation = st.selectbox("Select operation", [
+        "sin (Sine)",
+        "cos (Cosine)",
+        "tan (Tangent)",
+        "log (Log base 10)",
+        "ln (Natural Log)",
+        "factorial",
+        "abs (Absolute Value)",
+        "deg to rad (Degrees to Radians)"
+    ])
+    
+    if st.button("Calculate", key="sci_calc"):
+        result = None
+        if sci_operation == "sin (Sine)":
+            result = math.sin(math.radians(sci_num))
+        elif sci_operation == "cos (Cosine)":
+            result = math.cos(math.radians(sci_num))
+        elif sci_operation == "tan (Tangent)":
+            result = math.tan(math.radians(sci_num))
+        elif sci_operation == "log (Log base 10)":
+            if sci_num <= 0:
+                st.error("Cannot calculate log of zero or negative number")
+            else:
+                result = math.log10(sci_num)
+        elif sci_operation == "ln (Natural Log)":
+            if sci_num <= 0:
+                st.error("Cannot calculate natural log of zero or negative number")
+            else:
+                result = math.log(sci_num)
+            if sci_num <= 0:
+                st.error("Cannot calculate natural log of zero or negative number")
+            else:
+                result = math.log(sci_num)
+        elif sci_operation == "factorial":
+            if sci_num < 0 or sci_num != int(sci_num):
+                st.error("Factorial only works on positive whole numbers")
+            else:
+                 result = math.factorial(int(sci_num))
+        elif sci_operation == "abs (Absolute Value)":
+            result = abs(sci_num)
+        elif sci_operation == "deg to rad (Degrees to Radians)":
+            result = math.radians(sci_num)
+
+        if result is not None:
+            st.success(f"Answer: {result}") 
+            st.session_state.history.append(f"{sci_operation} of {sci_num} = {result}")
+
+
 
 
 
